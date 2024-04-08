@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlincollapsingtoolbar.R
@@ -47,7 +48,8 @@ class FirstFragment : Fragment() {
         adapter = ProductsAdapter(emptyList())
         productRV.adapter = adapter
 
-        productRV.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+//        productRV.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        productRV.layoutManager = GridLayoutManager(context, 2)
 
         // Observe the LiveData for products
         mainViewModel.products.observe(viewLifecycleOwner, Observer { products ->

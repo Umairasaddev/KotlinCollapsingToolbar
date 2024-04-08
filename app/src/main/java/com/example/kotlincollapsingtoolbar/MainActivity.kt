@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         tabLayout.addTab(tabLayout.newTab().setText("First"))
         tabLayout.addTab(tabLayout.newTab().setText("Second"))
 
+
         viewPager.adapter = adapter
 
 

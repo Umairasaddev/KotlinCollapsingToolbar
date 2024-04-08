@@ -1,33 +1,31 @@
 package com.example.kotlincollapsingtoolbar.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlincollapsingtoolbar.R
+import com.example.kotlincollapsingtoolbar.ViewModel.PostsViewModel
+import com.example.kotlincollapsingtoolbar.adapters.PostsAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SecondFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+@AndroidEntryPoint
 class SecondFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
+    lateinit var postViewModel: PostsViewModel
+    lateinit var postsAdapter: PostsAdapter
+    lateinit var rvPosts: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
+        postViewModel = ViewModelProvider(this)[PostsViewModel::class.java]
+
     }
 
     override fun onCreateView(
@@ -38,23 +36,28 @@ class SecondFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_second, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SecondFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SecondFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        rvPosts = view.findViewById(R.id.rvPosts)
+        postsAdapter = PostsAdapter(emptyList())
+        rvPosts.adapter = postsAdapter
+
+        rvPosts.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+        postViewModel.posts.observe(viewLifecycleOwner, Observer { posts ->
+            Log.d("umair", "onViewCreated for posts: " + posts.toString())
+            postsAdapter.updatePosts(posts)
+        })
+
     }
 }
+
+
+
+
+
+
+
+
+
